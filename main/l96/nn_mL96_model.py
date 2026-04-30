@@ -101,7 +101,7 @@ def G(weights, net, net_input, x_0, t, T, ic_cov_sqrtt, st = 2):
     y = np.zeros(2*nx)
     load_weights(net, weights)
     gamma = (8 + 6*net(net_input).detach().numpy())[:,0]
-    out = runge_kutta_v(gamma, x_0 + ic_cov_sqrtt@np.random.normal(0, 1, size = nx), t, T)[int(4/(st*t)):]
+    out = runge_kutta_v(gamma, x_0 + ic_cov_sqrtt@np.random.normal(0, 1, size = nx), t, T, st)[int(4/(st*t)):]
     y[:nx] = np.mean(out, axis = 0)
     y[nx:] = np.sqrt(np.var(out, axis = 0, ddof = 1))
     return y
