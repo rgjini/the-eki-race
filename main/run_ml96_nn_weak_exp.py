@@ -142,40 +142,6 @@ def run_iekf(method_type, rmse, ran):
     np.savetxt((path + 'runs/IEKF/'+method_type+str(rmse)+'/fow_runs/iekf_%d.txt') %ran, fow_runs, delimiter = ',')
     np.savez((path + 'runs/IEKF/'+method_type+str(rmse)+'/ensemble/iekf_%d.npz') %ran, *u_all)
 
-def run_gnsl(method_type, rmse, ran):
-    np.random.seed(ran)  #initialize random seed
-
-    nx, x0, t, T, ic_cov_sqrt, y, R, mu, B, model, model_input_tensor = model_setup()
-
-    K_vals = np.arange(65, 110, 5)
-    np.savetxt((path + 'runs/GNSL/'+method_type+str(rmse)+'/gnsl_ens_sizes.txt'), K_vals, delimiter = ',')
-    u_all = []
-    fow_runs = []
-
-
-    for ii in K_vals: 
-        #Intitializing EKI ensemble 
-        K = ii         #number of ensemble members
-        max_runs = 120   #set a maximum number of runs 
-        N_t = nx         
-        alpha = 0.15 #0.25     #adjustment factor
-
-        u =  np.random.normal(0, 1, size = (N_t,K))     #initialize parameter ensemble
-
-        #GNSL Test 
-        try: 
-            u_out, f_out, _ = EKA.IEKF_stable(ml96.G, u, (model, model_input_tensor, x0, t, T, ic_cov_sqrt), 
-                                y, R, mu, B, alpha = alpha, method = method_type, 
-                                min_rmse = rmse, tol_x = 1e-4, tol_f = 1e-4, max_iter = max_runs)
-        except LinAlgError as a: 
-            u_out = np.empty((N_t, K))
-            u_out[:] = np.nan
-            f_out = max_runs*K
-        fow_runs.append(f_out)
-        u_all.append(u_out)
-
-    np.savetxt((path + 'runs/GNSL/'+method_type+str(rmse)+'/fow_runs/gnsl_%d.txt') %ran, fow_runs, delimiter = ',')
-    np.savez((path + 'runs/GNSL/'+method_type+str(rmse)+'/ensemble/gnsl_%d.npz') %ran, *u_all)
 
 def run_uki(method_type, rmse, ran):
     np.random.seed(ran)  #initialize random seed
