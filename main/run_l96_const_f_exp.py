@@ -9,7 +9,7 @@ import numpy as np
 from scipy.optimize import least_squares
 import multiprocessing as mp
 import EnsembleKalmanAlgorithms as EKA
-import main.l96.L96_const_model as gl96
+import l96.L96_const_model as gl96
 
 path = "l96/const/"
 

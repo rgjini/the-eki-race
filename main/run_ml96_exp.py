@@ -11,7 +11,7 @@ from numpy.linalg import LinAlgError
 from scipy.optimize import least_squares
 import multiprocessing as mp
 import EnsembleKalmanAlgorithms as EKA
-import main.l96.mL96_model as ml96
+import l96.mL96_model as ml96
 
 path = "l96/mp/"
 
@@ -85,6 +85,7 @@ def run_etki(method_type, rmse, ran):
                             y, R, mu, B, method = method_type, 
                             min_rmse = rmse, tol_x = 1e-4, tol_f = 1e-4, max_iter = max_runs)
         fow_runs.append(f_out)
+        u_all.append(u_out)
 
     np.savetxt((path + 'runs/ETKI/'+method_type+str(rmse)+'/fow_runs/etki_%d.txt') %ran, fow_runs, delimiter = ',')
     np.savez((path + 'runs/ETKI/'+method_type+str(rmse)+'/ensemble/etki_%d.npz') %ran, *u_all)
